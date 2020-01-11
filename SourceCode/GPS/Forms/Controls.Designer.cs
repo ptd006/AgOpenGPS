@@ -958,7 +958,7 @@ namespace AgOpenGPS
         private void btnFlag_Click(object sender, EventArgs e)
         {
             int nextflag = flagPts.Count + 1;
-            CFlag flagPt = new CFlag(pn.latitude, pn.longitude, pn.fix.easting, pn.fix.northing, fixHeading, flagColor, nextflag, DateTime.Today.ToString());
+            CFlag flagPt = new CFlag(pn.latitude, pn.longitude, pn.fix.easting, pn.fix.northing, fixHeading, flagColor, nextflag, DateTime.Now.ToString());
             flagPts.Add(flagPt);
             FileSaveFlags();
             
@@ -2037,25 +2037,23 @@ namespace AgOpenGPS
             flagColor = 2;
             btnFlag.Image = Properties.Resources.FlagYel;
         }
-        private void toolStripMenuFlagDelete_Click(object sender, EventArgs e)
+        private void toolStripMenuFlagForm_Click(object sender, EventArgs e)
         {
-            //delete selected flag and set selected to none
-            DeleteSelectedFlag();
-            FileSaveFlags();
-        }
-        private void toolStripMenuFlagDeleteAll_Click(object sender, EventArgs e)
-        {
-            flagNumberPicked = 0;
-            flagPts.Clear();
-            FileSaveFlags();
-        }
-        private void contextMenuStripFlag_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            toolStripMenuFlagDelete.Enabled = flagNumberPicked != 0;
+            Form fc = Application.OpenForms["FormFlags"];
 
-            toolStripMenuFlagDeleteAll.Enabled = flagPts.Count > 0;
-        }
+            if (fc != null)
+            {
+                fc.Focus();
+                return;
+            }
 
+            if (flagPts.Count > 0)
+            {
+                flagNumberPicked = 1;
+                Form form = new FormFlags(this);
+                form.Show();
+            }            
+        }
 
         //OpenGL Window context Menu and functions
         private void deleteFlagToolOpenGLContextMenu_Click(object sender, EventArgs e)

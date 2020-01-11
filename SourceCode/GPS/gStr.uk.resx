@@ -1296,10 +1296,6 @@
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Польовий вигляд зверху</value>
   </data>
-  <data name="gsTowBetweenDisabledWhen" xml:space="preserve">
-    <value>Тягнути між вимкн. коли
-&lt; 2 метри</value>
-  </data>
   <data name="gsTowBetweenLength" xml:space="preserve">
     <value>Тягн.між відстанню</value>
   </data>

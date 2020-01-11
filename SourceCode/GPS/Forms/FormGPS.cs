@@ -695,7 +695,7 @@ namespace AgOpenGPS
 
         // Procedures and Functions ---------------------------------------
 
-        public uint LoadGLTextures()
+        public void LoadGLTextures()
         {
             GL.Enable(EnableCap.Texture2D);
             try
@@ -856,7 +856,7 @@ namespace AgOpenGPS
                         GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
                         bitmap.UnlockBits(data);
                         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 9729);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9726);
                     }
                 }
             }
@@ -880,7 +880,7 @@ namespace AgOpenGPS
                         GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
                         bitmap.UnlockBits(data);
                         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 9729);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9729);
                     }
                 }
             }
@@ -913,9 +913,6 @@ namespace AgOpenGPS
                 //WriteErrorLog("Loading Landscape Textures" + ex);
                 MessageBox.Show("Texture File SpeedoNeedle.PNG is Missing", ex.Message);
             }
-
-            //return array of textures
-            return texture[0];
         }// Load Bitmaps And Convert To Textures
 
         //start the UDP server

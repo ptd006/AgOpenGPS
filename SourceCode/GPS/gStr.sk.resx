@@ -1215,9 +1215,6 @@
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Pohľad zvrchu</value>
   </data>
-  <data name="gsTowBetweenDisabledWhen" xml:space="preserve">
-    <value>"Otoč medzi" je vypnutá, ak je &lt; 200 cm alebo 78 palcov</value>
-  </data>
   <data name="gsTowBetweenLength" xml:space="preserve">
     <value>Dĺžka "Otoč medzi"</value>
   </data>

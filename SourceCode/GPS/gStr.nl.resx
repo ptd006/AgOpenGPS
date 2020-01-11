@@ -1242,9 +1242,6 @@
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Bovenaanzicht Perceel</value>
   </data>
-  <data name="gsTowBetweenDisabledWhen" xml:space="preserve">
-    <value>Tussenas niet mogelijk als &lt;200 cm</value>
-  </data>
   <data name="gsTowBetweenLength" xml:space="preserve">
     <value>Tussenas Lengte</value>
   </data>

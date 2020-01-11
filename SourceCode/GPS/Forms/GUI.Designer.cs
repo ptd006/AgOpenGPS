@@ -281,7 +281,15 @@ namespace AgOpenGPS
                 youTurnStripBtn.Visible = false;
                 //ZoomExtentsStripBtn.Visible = false;
                 //stripEqWidth.Visible = false;
-                lblDateTime.Visible = false;
+                if (isSimple)
+                {
+                    lblDateTime.Visible = true;
+                }
+                else
+                {
+                    lblDateTime.Visible = false;
+
+                }
             }
 
 
@@ -292,8 +300,16 @@ namespace AgOpenGPS
             }
             else
             {
-                snapLeftBigStrip.Visible = false;
-                snapRightBigStrip.Visible = false;
+                if (isSimple)
+                {
+                    snapLeftBigStrip.Visible = true;
+                    snapRightBigStrip.Visible = true;
+                }
+                else
+                {
+                    snapLeftBigStrip.Visible = false;
+                    snapRightBigStrip.Visible = false;
+                }
             }
 
             if (Width > 1400)

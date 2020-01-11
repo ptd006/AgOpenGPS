@@ -173,7 +173,6 @@ namespace AgOpenGPS
                                 (sinSectionHeading * section[tool.numOfSections].positionLeft) + toolPos.northing);
 
                         GL.Vertex3(pt.easting, pt.northing, 0);
-                        label3.Text = pt.northing.ToString();
 
                         //Right side of triangle
                         pt = new vec2((cosSectionHeading * section[tool.numOfSections].positionRight) + toolPos.easting,
@@ -185,7 +184,6 @@ namespace AgOpenGPS
                         //antenna
                         GL.Vertex3(section[tool.numOfSections].patchList[patchCount - 1][last - 2].easting, section[tool.numOfSections].patchList[patchCount - 1][last - 2].northing, 0);
                         GL.Vertex3(section[tool.numOfSections].patchList[patchCount - 1][last - 1].easting, section[tool.numOfSections].patchList[patchCount - 1][last - 1].northing, 0);
-                        label4.Text = section[tool.numOfSections].patchList[patchCount - 1][last - 2].northing.ToString();
                         GL.End();
                     }
                     else
@@ -204,7 +202,6 @@ namespace AgOpenGPS
                                         (sinSectionHeading * section[j].positionLeft) + toolPos.northing);
 
                                 GL.Vertex3(pt.easting, pt.northing, 0);
-                                label3.Text = pt.northing.ToString();
 
                                 //Right side of triangle
                                 pt = new vec2((cosSectionHeading * section[j].positionRight) + toolPos.easting,
@@ -216,7 +213,6 @@ namespace AgOpenGPS
                                 //antenna
                                 GL.Vertex3(section[j].patchList[patchCount - 1][last - 2].easting, section[j].patchList[patchCount - 1][last - 2].northing, 0);
                                 GL.Vertex3(section[j].patchList[patchCount - 1][last - 1].easting, section[j].patchList[patchCount - 1][last - 1].northing, 0);
-                                label4.Text = section[j].patchList[patchCount - 1][last - 2].northing.ToString();
                                 GL.End();
                             }
                         }

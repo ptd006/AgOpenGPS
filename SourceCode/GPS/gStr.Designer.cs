@@ -3661,17 +3661,6 @@ namespace AgOpenGPS {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tow Between Disabled When
-        ///&lt; 200 cm or
-        ///&lt; 78 inches.
-        /// </summary>
-        public static string gsTowBetweenDisabledWhen {
-            get {
-                return ResourceManager.GetString("gsTowBetweenDisabledWhen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tow Between Length.
         /// </summary>
         public static string gsTowBetweenLength {
@@ -4149,7 +4138,7 @@ namespace AgOpenGPS {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to YouTurn Recorder.
+        ///   Looks up a localized string similar to UTurn Recorder.
         /// </summary>
         public static string gsYouTurnRecorder {
             get {

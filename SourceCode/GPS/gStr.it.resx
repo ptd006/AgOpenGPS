@@ -972,9 +972,6 @@
   <data name="gsToolWidth" xml:space="preserve">
     <value>Larghezza Attrezzo</value>
   </data>
-  <data name="gsTowBetweenDisabledWhen" xml:space="preserve">
-    <value>Traino Disabilitato Quando &lt;200cm</value>
-  </data>
   <data name="gsTowBetweenLength" xml:space="preserve">
     <value>Distanza Attrezzo</value>
   </data>

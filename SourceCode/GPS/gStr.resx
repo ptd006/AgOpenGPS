@@ -1311,11 +1311,6 @@
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Top Field View</value>
   </data>
-  <data name="gsTowBetweenDisabledWhen" xml:space="preserve">
-    <value>Tow Between Disabled When
-&lt; 200 cm or
-&lt; 78 inches</value>
-  </data>
   <data name="gsTowBetweenLength" xml:space="preserve">
     <value>Tow Between Length</value>
   </data>
@@ -1470,7 +1465,7 @@
     <value>Yaw:</value>
   </data>
   <data name="gsYouTurnRecorder" xml:space="preserve">
-    <value>YouTurn Recorder</value>
+    <value>UTurn Recorder</value>
   </data>
   <data name="gsYoucanstillstartnewfield" xml:space="preserve">
     <value>You can still start a new field</value>

@@ -396,9 +396,6 @@
   <data name="gsDeletePath" xml:space="preserve">
     <value>Supprimer le chemin</value>
   </data>
-  <data name="gsDelta_" xml:space="preserve">
-    <value>Delta</value>
-  </data>
   <data name="gsDidYouMakeChanges" xml:space="preserve">
     <value>Avez-vous fait des changements?</value>
   </data>
@@ -915,9 +912,6 @@
   <data name="gsOvershootReduction" xml:space="preserve">
     <value>Réduction de dépassement</value>
   </data>
-  <data name="gsPAOGIReachIMU" xml:space="preserve">
-    <value>PAOGI (Reach IMU)</value>
-  </data>
   <data name="gsPass" xml:space="preserve">
     <value>Passages</value>
   </data>
@@ -1218,9 +1212,6 @@
   <data name="gsTopFieldView" xml:space="preserve">
     <value>Vue du champ</value>
   </data>
-  <data name="gsTowBetweenDisabledWhen" xml:space="preserve">
-    <value>Outil désactivé si largeur &lt;200cm</value>
-  </data>
   <data name="gsTowBetweenLength" xml:space="preserve">
     <value>Distance de l'outil</value>
   </data>
@@ -1365,9 +1356,6 @@
   <data name="gsWorkSwitchControlsManual" xml:space="preserve">
     <value>Contrôle des commande Manuelle</value>
   </data>
-  <data name="gsYaw_" xml:space="preserve">
-    <value>Yaw:</value>
-  </data>
   <data name="gsYouTurnRecorder" xml:space="preserve">
     <value>Enregistreur de tournant</value>
   </data>
@@ -1379,9 +1367,6 @@
   </data>
   <data name="gsZeroTrip" xml:space="preserve">
     <value>Traçé &gt;0&lt;</value>
-  </data>
-  <data name="gsZoom" xml:space="preserve">
-    <value>Zoom</value>
   </data>
   <data name="gsgoogleEarthFlags" xml:space="preserve">
     <value>Points Google Earth</value>

@@ -3,9 +3,12 @@
 using System.IO.Ports;
 using System;
 using System.Windows.Forms;
-using System.Drawing;
 using System.Globalization;
 using AgOpenGPS.Properties;
+using System.Text;
+using System.Threading;
+using System.IO;
+using System.Linq;
 
 namespace AgOpenGPS
 {
@@ -13,6 +16,9 @@ namespace AgOpenGPS
     {
         public static string portNameGPS = "COM GPS";
         public static int baudRateGPS = 4800;
+
+        public static string portNameGPS2 = "COM GPS";
+        public static int baudRateGPS2 = 4800;
 
         public static string portNameRelaySection = "COM Sect";
         public static int baudRateRelaySection = 38400;
@@ -32,7 +38,10 @@ namespace AgOpenGPS
         public bool wasAutoSteerConnectedLastRun = false;
 
         //serial port gps is connected to
-        public SerialPort sp = new SerialPort(portNameGPS, baudRateGPS, Parity.None, 8, StopBits.One);
+        public SerialPort spGPS = new SerialPort(portNameGPS, baudRateGPS, Parity.None, 8, StopBits.One);
+
+
+        public SerialPort spGPS2 = new SerialPort(portNameGPS2, baudRateGPS2, Parity.None, 8, StopBits.One);
 
         //serial port Arduino is connected to
         public SerialPort spRelay = new SerialPort(portNameRelaySection, baudRateRelaySection, Parity.None, 8, StopBits.One);
@@ -487,21 +496,257 @@ namespace AgOpenGPS
             //recvSentenceSettings = sbNMEAFromGPS.ToString();
         }
 
+
         private delegate void LineReceivedEventHandler(string sentence);
+
+        public byte[] rawBuffer = new byte[500];
+        public byte[] Header = { 0xB5, 0x62 };
+        public int BytesRead = 0;
+        public int MessageLength = 0;
+        int CK_A = 0, CK_B = 0;
+
+        public bool started = false;
+
+
+        private void method2()
+        {
+            while (true)
+            {
+                pn.updatedUBX = !pn.updatedUBX;
+            }
+        }
+
 
         //serial port receive in its own thread
         private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            if (sp.IsOpen)
+            //if (started == false)
+            //{
+                //started = true;
+                //Thread thr1 = new Thread(method2);
+                //Thread thr2 = new Thread(method2);
+               // Thread thr3 = new Thread(method2);
+
+
+                //thr1.Start();
+                //thr2.Start();
+                //thr3.Start();
+
+            //}
+            //System.Windows.Forms.MessageBox.Show("---" + pn.updatedUBX.ToString());
+
+            /*
+            // Creating and initializing threads 
+            Thread thr1 = new Thread(method2);
+            Thread thr2 = new Thread(method2);
+            Thread thr3 = new Thread(method2);
+            Thread thr4 = new Thread(method2);
+            Thread thr5 = new Thread(method2);
+
+            System.Windows.Forms.MessageBox.Show("---" + spGPS.ReceivedBytesThreshold.ToString());
+            thr1.Start();
+            thr2.Start();
+            thr3.Start();
+            thr4.Start();
+            thr5.Start();
+            System.Windows.Forms.MessageBox.Show("---" + pn.updatedUBX.ToString());
+            */
+
+
+
+            if (spGPS.IsOpen)
             {
                 try
                 {
-                    //give it a sec to spit it out
-                    //System.Threading.Thread.Sleep(2000);
+                    if (Properties.Settings.Default.setGPS_fixFromWhichSentence == "UBX")
+                    {
+                        while (spGPS.BytesToRead > 0)
+                        {
 
-                    //read whatever is in port
-                    string sentence = sp.ReadExisting();
-                    this.BeginInvoke(new LineReceivedEventHandler(SerialLineReceived), sentence);
+
+                            spGPS.Read(rawBuffer, BytesRead, 1);
+
+                            if (BytesRead < 2)
+                            {
+                                if (Header[BytesRead] == rawBuffer[BytesRead])
+                                {
+                                    CK_A = 0;
+                                    CK_B = 0;
+                                    BytesRead++;
+                                }
+                                else
+                                {
+                                    BytesRead = 0;
+                                }
+                            }
+                            else
+                            {
+                                if (BytesRead == 5)
+                                {
+                                    MessageLength = BitConverter.ToInt16(rawBuffer, 4);
+                                }
+                                
+                                if (BytesRead < MessageLength + 6)
+                                {
+                                    CK_A = CK_A + rawBuffer[BytesRead];
+                                    CK_A &= 0xFf;
+                                    CK_B = CK_B + CK_A;
+                                    CK_B &= 0xFf;
+                                }
+                                BytesRead++;
+                                if (BytesRead > (MessageLength + 7))//here ck_B is set
+                                {
+
+                                    if (CK_A == rawBuffer[MessageLength + 6] && CK_B == rawBuffer[MessageLength + 7])
+                                    {
+                                        string sentence = "";
+
+
+
+
+
+                                        if (0x01 == rawBuffer[2] && 0x04 == rawBuffer[3])//UBX-NAV-DOP
+                                        {
+
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])//UBX-NAV-RELPOSNED
+                                        {
+                                            byte rr = rawBuffer[66];
+
+                                            sentence = "$UBX-RELPOSNED,0,0,0*";
+
+                                            if ((rr & (1 << 0)) != 0 && (rr & (1 << 2)) != 0)//gnssFixOK && relPosValid
+                                            {
+                                                double heading = BitConverter.ToInt32(rawBuffer, 30) * 0.00001;
+                                                int roll = (int)(Math.Atan2(BitConverter.ToInt32(rawBuffer, 22) + BitConverter.ToInt32(rawBuffer, 40) / 100, 100) * Math.PI / (double)180 * 16);
+
+
+                                                //pn.headingHDT = BitConverter.ToInt32(rawBuffer, 30) * 0.00001;
+                                                //ahrs.rollX16 =  (int)(Math.Atan2(BitConverter.ToInt32(rawBuffer, 22) + BitConverter.ToInt32(rawBuffer, 40) / 100, 100) * Math.PI / (double)180 * 16);
+
+
+                                                //• UBX - NAV - RELPOSNED: The carrSoln flag will be set to 1 for RTK float and 2 for RTK fixed.
+                                                //bit 3 & 4
+                                                //not sure if this is right
+                                                if ((rr & (1 << 3)) != 0)
+                                                {
+                                                    //pn.fixQuality = 4;
+                                                    sentence = "$UBX-RELPOSNED,4," + heading.ToString("N4") + "," + roll.ToString("N4") + "*";
+                                                }
+                                                else if ((rr & (1 << 4)) != 0)
+                                                {
+                                                    //pn.fixQuality = 3;
+                                                    sentence = "$UBX-RELPOSNED,3," + heading.ToString("N4") + "," + roll.ToString("N4") + "*";
+                                                }
+                                                else
+                                                {
+                                                    //pn.fixQuality = 2;
+                                                    sentence = "$UBX-RELPOSNED,2," + heading.ToString("N4") + "," + roll.ToString("N4") + "*";
+                                                }
+                                            }
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x14 == rawBuffer[3])//UBX-NAV-HPPOSLLH
+                                        {
+                                            sentence = "$UBX-HPPOSLLH,0,0,0,0*";
+                                            if ((rawBuffer[9] & (1 << 0)) == 0)
+                                            {
+
+                                                //pn.longitude = (rawBuffer[30] * 0.01 + BitConverter.ToInt32(rawBuffer, 14)) * 0.0000001;
+                                                //pn.latitude = (rawBuffer[31] * 0.01 + BitConverter.ToInt32(rawBuffer, 18)) * 0.0000001;
+                                                //pn.altitude = (rawBuffer[32] * 0.01 + BitConverter.ToInt32(rawBuffer, 22)) / 1000.0;
+                                                //pn.UpdateNorthingEasting();
+                                                //recvCounter = 0;
+                                                //pn.updatedUBX = true;
+
+
+
+
+                                                double longitude = (rawBuffer[30] * 0.01 + BitConverter.ToInt32(rawBuffer, 14)) * 0.0000001;
+                                                double latitude = (rawBuffer[31] * 0.01 + BitConverter.ToInt32(rawBuffer, 18)) * 0.0000001;
+                                                double altitude = (rawBuffer[32] * 0.01 + BitConverter.ToInt32(rawBuffer, 22)) / 1000.0;
+                                                sentence = "$UBX-HPPOSLLH,1," + longitude.ToString("N7") + "," + latitude.ToString("N7") + "," + altitude.ToString("N7") + "*";
+                                            }
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x07 == rawBuffer[3])// UBX-NAV-PVT
+                                        {
+                                            //UBX-NAV-PVT: The carrSoln flag will be set to 1 for RTK float and 2 for RTK fixed.
+                                            //bit 6 & 7
+
+                                            //pn.fixQuality = 4;????????????
+
+                                            //pn.satellitesTracked = rawBuffer[29];
+
+                                            //pn.hdop = BitConverter.ToInt16(rawBuffer, 82) / 100.0;
+
+
+
+
+                                            int satellitesTracked = rawBuffer[29];
+
+                                            double longitude = BitConverter.ToInt32(rawBuffer, 30) * 0.0000001;
+                                            double latitude = BitConverter.ToInt32(rawBuffer, 34) * 0.0000001;
+                                            double altitude = BitConverter.ToInt32(rawBuffer, 38) * 0.001;
+                                            double pdop = BitConverter.ToInt16(rawBuffer, 82) / 100.0;
+
+
+
+
+                                            if ((rawBuffer[27] & (1 << 6)) != 0)
+                                            {
+                                                //pn.fixQuality = 4;
+                                                sentence = "$UBX-PVT,3," + satellitesTracked.ToString() + "," + pdop.ToString("N5") + "," + latitude.ToString("N9") + "*";
+                                            }
+                                            else if ((rawBuffer[27] & (1 << 7)) != 0)
+                                            {
+                                                //pn.fixQuality = 3;
+                                                sentence = "$UBX-PVT,4," + satellitesTracked.ToString() + "," + pdop.ToString("N2") + "," + latitude.ToString("N9") + "*";
+                                            }
+                                            else
+                                            {
+                                                //pn.fixQuality = 2;
+                                                sentence = "$UBX-PVT,2," + satellitesTracked.ToString() + "," + pdop.ToString("N5") + "," + latitude.ToString("N9") + "*";
+                                            }
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])//UBX-NAV-RELPOSNED
+                                        {
+
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])//UBX-NAV-RELPOSNED
+                                        {
+
+                                        }
+
+
+
+                                        if (sentence != "")
+                                        {
+                                            int sum = 0, inx;
+                                            char[] sentence_chars = sentence.ToCharArray();
+                                            char tmp;
+
+                                            for (inx = 1; ; inx++)
+                                            {
+                                                tmp = sentence_chars[inx];
+                                                if (tmp == '*') break;
+                                                sum ^= tmp;
+                                            }
+                                            this.BeginInvoke(new LineReceivedEventHandler(SerialLineReceived), sentence + String.Format("{0:X2}", sum) + "\r\n");
+                                        }
+                                    }
+                                    MessageLength = 0;
+                                    BytesRead = 0;
+
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        started = false;
+                        //read whatever is in port
+                        string sentence = spGPS.ReadExisting();
+                        this.BeginInvoke(new LineReceivedEventHandler(SerialLineReceived), sentence);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -511,13 +756,39 @@ namespace AgOpenGPS
                 }
             }
         }
+        //serial port receive in its own thread
+        private void sp_DataReceived2(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            if (spGPS2.IsOpen)
+            {
+                try
+                {
+                    if (spGPS2.BytesToRead > 0)
+                    {
+                        int intBuffer = spGPS2.BytesToRead;
+                        byte[] rawBuffer2 = new byte[intBuffer];
+                        spGPS2.Read(rawBuffer2, 0, intBuffer);
+                        if (spGPS.IsOpen)
+                        {
+                            //System.Windows.Forms.MessageBox.Show("fail".ToString());
+                            spGPS.Write(rawBuffer2, 0, intBuffer);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteErrorLog("GPS Data Recv" + ex.ToString());
+                }
+            }
+        }
+
 
         public void SerialPortOpenGPS()
         {
             //close it first
             SerialPortCloseGPS();
 
-            if (sp.IsOpen)
+            if (spGPS.IsOpen)
             {
                 simulatorOnToolStripMenuItem.Checked = false;
                 panelSim.Visible = false;
@@ -528,15 +799,18 @@ namespace AgOpenGPS
             }
 
 
-            if (!sp.IsOpen)
+            if (!spGPS.IsOpen)
             {
-                sp.PortName = portNameGPS;
-                sp.BaudRate = baudRateGPS;
-                sp.DataReceived += sp_DataReceived;
-                sp.WriteTimeout = 1000;
+
+
+
+                spGPS.PortName = portNameGPS;
+                spGPS.BaudRate = baudRateGPS;
+                spGPS.DataReceived += sp_DataReceived;
+                spGPS.WriteTimeout = 1000;
             }
 
-            try { sp.Open(); }
+            try { spGPS.Open(); }
             catch (Exception)
             {
                 //MessageBox.Show(exc.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Serial Port Active");
@@ -550,21 +824,80 @@ namespace AgOpenGPS
                 //SettingsPageOpen(0);
             }
 
-            if (sp.IsOpen)
+            if (spGPS.IsOpen)
             {
                 //btnOpenSerial.Enabled = false;
 
                 //discard any stuff in the buffers
-                sp.DiscardOutBuffer();
-                sp.DiscardInBuffer();
-
-                //update port status label
-                //stripPortGPS.Text = portNameGPS + " " + baudRateGPS.ToString();
-                //stripPortGPS.ForeColor = Color.ForestGreen;
+                spGPS.DiscardOutBuffer();
+                spGPS.DiscardInBuffer();
 
                 Properties.Settings.Default.setPort_portNameGPS = portNameGPS;
                 Properties.Settings.Default.setPort_baudRate = baudRateGPS;
                 Properties.Settings.Default.Save();
+
+
+
+
+                //send config too f9p
+                using (StreamReader reader = new StreamReader("C:/Users/p00qwerty/Documents/text.txt"))
+                {
+                    try
+                    {
+
+                        while (!reader.EndOfStream)
+                        {
+                            //byte[] bytesToSend = { 0x38, 0x30, 0x31, 0x73, 0x21, 0x30, 0x30, 0x31, 0x0D };
+
+
+                            string line = reader.ReadLine();
+
+                            byte[] data = line.Split('-').Select(b => Convert.ToByte(b, 16)).ToArray();
+
+                            spGPS.Write(data, 0, data.Length);
+
+                            // System.Windows.Forms.MessageBox.Show("First byte: {" + 0x38.ToString() + "}");
+                            //System.Windows.Forms.MessageBox.Show("First byte: {" + data[0].ToString() + "}");
+
+                        }
+                    }
+                    catch (Exception er)
+                    {
+
+                        System.Windows.Forms.MessageBox.Show("First byte: {");
+                    }
+                }
+            }
+        }
+        public void SerialPortOpenGPS2()
+        {
+            //close it first
+            SerialPortCloseGPS2();
+
+
+
+            if (!spGPS2.IsOpen)
+            {
+                spGPS2.PortName = portNameGPS2;
+                spGPS2.BaudRate = baudRateGPS2;
+                spGPS2.DataReceived += sp_DataReceived2;
+                spGPS2.WriteTimeout = 1000;
+            }
+
+            try { spGPS2.Open(); }
+            catch (Exception)
+            {
+            }
+
+            if (spGPS2.IsOpen)
+            {
+                spGPS2.DiscardOutBuffer();
+                spGPS2.DiscardInBuffer();
+
+                Properties.Settings.Default.setPort_portNameGPS2 = portNameGPS2;
+                Properties.Settings.Default.setPort_baudRate2 = baudRateGPS2;
+                Properties.Settings.Default.Save();
+
             }
         }
 
@@ -572,8 +905,8 @@ namespace AgOpenGPS
         {
             //if (sp.IsOpen)
             {
-                sp.DataReceived -= sp_DataReceived;
-                try { sp.Close(); }
+                spGPS.DataReceived -= sp_DataReceived;
+                try { spGPS.Close(); }
                 catch (Exception e)
                 {
                     WriteErrorLog("Closing GPS Port" + e.ToString());
@@ -584,7 +917,26 @@ namespace AgOpenGPS
                 //stripPortGPS.Text = " * * " + baudRateGPS.ToString();
                 //stripPortGPS.ForeColor = Color.ForestGreen;
                 //stripOnlineGPS.Value = 1;
-                sp.Dispose();
+                spGPS.Dispose();
+            }
+        }
+        public void SerialPortCloseGPS2()
+        {
+            //if (sp.IsOpen)
+            {
+                spGPS2.DataReceived -= sp_DataReceived2;
+                try { spGPS2.Close(); }
+                catch (Exception e)
+                {
+                    WriteErrorLog("Closing GPS Port" + e.ToString());
+                    MessageBox.Show(e.Message, "Connection already terminated?");
+                }
+
+                //update port status labels
+                //stripPortGPS.Text = " * * " + baudRateGPS.ToString();
+                //stripPortGPS.ForeColor = Color.ForestGreen;
+                //stripOnlineGPS.Value = 1;
+                spGPS2.Dispose();
             }
         }
 

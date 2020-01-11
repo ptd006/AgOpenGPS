@@ -138,7 +138,7 @@ Field	Meaning
         public double zone;
         public double centralMeridian, convergenceAngle;
 
-        public bool updatedGGA, updatedOGI, updatedRMC;
+        public bool updatedGGA, updatedOGI, updatedRMC, updatedUBX;
 
         public string rawBuffer = "";
         private string[] words;
@@ -210,7 +210,7 @@ Field	Meaning
             //fix.northing = (Math.Sin(convergenceAngle) * east) + (Math.Cos(convergenceAngle) * nort);
         }
 
-        public void ParseNMEA()
+        public void ParseNMEA() 
         {
             if (rawBuffer == null) return;
 
@@ -242,12 +242,23 @@ Field	Meaning
             //now we have a complete sentence or more somewhere in the portData
             while (true)
             {
+
+
+
+
                 //extract the next NMEA single sentence
                 nextNMEASentence = Parse();
+
+
+
+
+
                 if (nextNMEASentence == null) return;
 
                 //parse them accordingly
                 words = nextNMEASentence.Split(',');
+
+
                 if (words.Length < 3) return;
 
                 if (words[0] == "$GPGGA" || words[0] == "$GNGGA") ParseGGA();
@@ -258,8 +269,100 @@ Field	Meaning
                 if (words[0] == "$PTNL") ParseAVR();
                 if (words[0] == "$GNTRA") ParseTRA();
 
+                if (words[0] == "$UBX-RELPOSNED") ParseRELPOSNED();
+                if (words[0] == "$UBX-HPPOSLLH") ParsePPOSLLH();
+                if (words[0] == "$UBX-PVT") ParsePVT();
+
+
+
+
+                //private void SerialLineReceived2(double sentence, int abc, int bca)
+                //{
+                //   pn.headingHDT = sentence;
+                //   ahrs.rollX16 = abc;
+                //    pn.fixQuality = bca;//????????????????
+                //
+
             }// while still data
         }
+
+        private void ParseRELPOSNED()
+        {
+            if (!String.IsNullOrEmpty(words[1]))
+            {
+                //sentence = "$UBX-RELPOSNED,4,heading,roll";
+                if (words[1] == "0")//bad quality
+                {
+                    //headingHDT = 9999;
+                    mf.ahrs.rollX16 = 9999;
+                }
+                else
+                {
+                    double.TryParse(words[2], NumberStyles.Float, CultureInfo.InvariantCulture, out headingHDT);
+                    double.TryParse(words[3], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll);
+
+                    mf.ahrs.rollX16 = (int)(nRoll * 16);
+                }
+
+
+                // double.TryParse(words[5], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll);
+
+            }
+        }
+        private void ParsePVT()
+        {
+            if (!String.IsNullOrEmpty(words[1]))
+            {
+                //sentence = "$UBX-PVT,1,satellitesTracked,pdop,fixtype"
+                if (words[1] != "0")
+                {
+                    int.TryParse(words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality);
+                    //fixQuality
+
+                    //satellites tracked
+                    int.TryParse(words[2], NumberStyles.Float, CultureInfo.InvariantCulture, out satellitesTracked);
+
+                    //hdop
+                    double.TryParse(words[3], NumberStyles.Float, CultureInfo.InvariantCulture, out hdop);
+                }
+
+
+                // double.TryParse(words[5], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll);
+
+            }
+        }
+        private void ParsePPOSLLH()
+        {
+
+
+
+            if (!String.IsNullOrEmpty(words[1]))//bad quality
+            {
+                if (words[1] == "0")
+                {
+
+
+                
+                }
+                else
+                {
+                    int.TryParse(words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality);
+                    //sentence = "$UBX-HPPOSLLH,1,longitude,latitude,altitude";
+                    double.TryParse(words[2], NumberStyles.Float, CultureInfo.InvariantCulture, out longitude);
+                    double.TryParse(words[3], NumberStyles.Float, CultureInfo.InvariantCulture, out latitude);
+                    double.TryParse(words[4], NumberStyles.Float, CultureInfo.InvariantCulture, out altitude);
+
+                    UpdateNorthingEasting();
+
+                    mf.recvCounter = 0;
+                    updatedUBX = true;
+                }
+            }
+        }
+
+
+
+
 
         private double rollK, Pc, G, Xp, Zp, XeRoll;
         private double P = 1.0;

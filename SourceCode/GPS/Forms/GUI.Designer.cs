@@ -2469,7 +2469,7 @@ namespace AgOpenGPS
         private void simulatorOnToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            if (sp.IsOpen)
+            if (spGPS.IsOpen)
             {
                 simulatorOnToolStripMenuItem.Checked = false;
                 panelSim.Visible = false;
@@ -2899,7 +2899,7 @@ namespace AgOpenGPS
         private void timerSim_Tick(object sender, EventArgs e)
         {
             //if a GPS is connected disable sim
-            if (!sp.IsOpen)
+            if (!spGPS.IsOpen)
             {
                 if (isAutoSteerBtnOn && (guidanceLineDistanceOff != 32000)) sim.DoSimTick(guidanceLineSteerAngle * 0.01);
                 else if (recPath.isDrivingRecordedPath) sim.DoSimTick(guidanceLineSteerAngle * 0.01);
@@ -3067,49 +3067,59 @@ namespace AgOpenGPS
 
         #endregion properties 
 
-        //Timer triggers at 10 msec, and is THE clock of the whole program
+        //Timer triggers at 15 msec, and is THE clock of the whole program
         //Timer stopped while parsing nmea
         private void tmrWatchdog_tick(object sender, EventArgs e)
         {
 
             //Check for a newline char, if none then just return
-            int cr = pn.rawBuffer.IndexOf("\n", StringComparison.Ordinal);
-            if (cr == -1) return; // No end found, wait for more data
+            //if (Properties.Settings.Default.setGPS_fixFromWhichSentence != "UBX")
+            //{
+                int cr = pn.rawBuffer.IndexOf("\n", StringComparison.Ordinal);
+                if (cr == -1) return; // No end found, wait for more data
+            //}
+
+
 
             //go see if data ready for draw and position updates
             tmrWatchdog.Enabled = false;
 
+
+            //0.01 second here
+
+
+
             //did we get a new fix position?
-            if (ScanForNMEA())
+            if (ScanForNMEA())//5 times second?
             {
-                if (threeSecondCounter++ >= fixUpdateHz * 2)
+                if (twoSecondCounter++ >= fixUpdateHz * 2)
                 {
-                    threeSecondCounter = 0;
-                    threeSeconds++;
+                    twoSecondCounter = 0;
+                    twoSeconds = true;
+                    zoomUpdateCounter = true;
                 }
                 if (oneSecondCounter++ >= fixUpdateHz)
                 {
                     oneSecondCounter = 0;
-                    oneSecond++;
+                    oneSecond = true;
                 }
                 if (oneHalfSecondCounter++ >= fixUpdateHz / 2)
                 {
                     oneHalfSecondCounter = 0;
-                    oneHalfSecond++;
+                    oneHalfSecond = true;
                 }
                 if (oneFifthSecondCounter++ >= fixUpdateHz / 5)
                 {
                     oneFifthSecondCounter = 0;
-                    oneFifthSecond++;
+                    oneFifthSecond = true;
                 }
 
-
-                /////////////////////////////////////////////////////////   333333333333333  ////////////////////////////////////////
-                //every 3 second update status
-                if (displayUpdateThreeSecondCounter != threeSeconds)
+                /////////////////////////////////////////////////////////   2222222222222222  ////////////////////////////////////////
+                //every 2 second update status
+                if (twoSeconds == true)
                 {
                     //reset the counter
-                    displayUpdateThreeSecondCounter = threeSeconds;
+                    twoSeconds = false;
 
                     if (panelBatman.Visible)
                     {
@@ -3170,13 +3180,13 @@ namespace AgOpenGPS
                 }//end every 3 seconds
 
                 //every second update all status ///////////////////////////   1 1 1 1 1 1 ////////////////////////////
-                if (displayUpdateOneSecondCounter != oneSecond)
+                if (oneSecond == true)
                 {
                     //reset the counter
-                    displayUpdateOneSecondCounter = oneSecond;
+                    oneSecond = false;
 
                     //counter used for saving field in background
-                    saveCounter++;
+                    saveCounter++;//every 60 seconds
 
                     if (ABLine.isBtnABLineOn && !ct.isContourBtnOn)
                     {
@@ -3319,10 +3329,10 @@ namespace AgOpenGPS
                 }
 
                 //every half of a second update all status  ////////////////    0.5  0.5   0.5    0.5    /////////////////
-                if (displayUpdateHalfSecondCounter != oneHalfSecond)
+                if (oneHalfSecond == true)
                 {
                     //reset the counter
-                    displayUpdateHalfSecondCounter = oneHalfSecond;
+                    oneHalfSecond = false;
 
                     if (isMetric)
                     {
@@ -3360,11 +3370,11 @@ namespace AgOpenGPS
 
                 } //end every 1/2 second
 
-                //every fifth second update  ///////////////////////////   FIFTH Fifth ////////////////////////////
-                if (displayUpdateOneFifthCounter != oneFifthSecond)
+                //every fifth second update  ///////////////////////////   0.2  FIFTH Fifth ////////////////////////////
+                if (oneFifthSecond == true)
                 {
                     //reset the counter
-                    displayUpdateOneFifthCounter = oneFifthSecond;
+                    oneFifthSecond = false;
 
                     lblHeading.Text = Math.Round(fixHeading * 57.295779513, 1) + "\u00B0";
 

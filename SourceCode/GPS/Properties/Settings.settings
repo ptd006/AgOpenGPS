@@ -8,7 +8,13 @@
     <Setting Name="setPort_portNameGPS" Type="System.String" Scope="User">
       <Value Profile="(Default)">COM GPS...</Value>
     </Setting>
+    <Setting Name="setPort_portNameGPS2" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM GPS...</Value>
+    </Setting>
     <Setting Name="setPort_baudRate" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">38400</Value>
+    </Setting>
+    <Setting Name="setPort_baudRate2" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">38400</Value>
     </Setting>
     <Setting Name="setWindow_Location" Type="System.Drawing.Point" Scope="User">

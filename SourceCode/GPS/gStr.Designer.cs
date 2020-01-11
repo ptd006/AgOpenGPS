@@ -383,7 +383,14 @@ namespace AgOpenGPS {
                 return ResourceManager.GetString("gsBaud", resourceCulture);
             }
         }
-        
+        public static string gsBaud2
+        {
+            get
+            {
+                return ResourceManager.GetString("gsBaud2", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Begin.
         /// </summary>
@@ -2507,16 +2514,25 @@ namespace AgOpenGPS {
                 return ResourceManager.GetString("gsPolygonsOn", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Port.
         /// </summary>
-        public static string gsPort {
-            get {
+        public static string gsPort
+        {
+            get
+            {
                 return ResourceManager.GetString("gsPort", resourceCulture);
             }
         }
-        
+        public static string gsPort2
+        {
+            get
+            {
+                return ResourceManager.GetString("gsPort2", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Ports.
         /// </summary>

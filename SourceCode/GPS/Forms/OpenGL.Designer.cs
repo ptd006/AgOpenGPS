@@ -493,9 +493,9 @@ namespace AgOpenGPS
                 oglBack.Refresh();
 
                 //draw the zoom window
-                if (threeSeconds != zoomUpdateCounter && panelBatman.Visible)
+                if (zoomUpdateCounter == true && panelBatman.Visible)
                 {
-                    zoomUpdateCounter = threeSeconds;
+                    zoomUpdateCounter = false;
                     oglZoom.Refresh();
                 }
             }
@@ -882,7 +882,7 @@ namespace AgOpenGPS
             RelayOutToPort(mc.relayData, CModuleComm.numRelayDataItems);
 
             //if a couple minute has elapsed save the field in case of crash and to be able to resume            
-            if (saveCounter > 59)       //2 counts per second X 60 seconds = 120 counts per minute.
+            if (saveCounter > 59)       //1 counts per second X 60 seconds = 60 counts per minute.
             {
                 //set saving flag off
                 //isSavingFile = true;
@@ -934,7 +934,7 @@ namespace AgOpenGPS
             GL.MatrixMode(MatrixMode.Modelview);
         }
 
-        private int zoomUpdateCounter = 0;
+        private bool zoomUpdateCounter = false;
 
         private void oglZoom_Paint(object sender, PaintEventArgs e)
         {

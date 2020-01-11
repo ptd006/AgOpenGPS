@@ -78,12 +78,12 @@ namespace AgOpenGPS
         public bool isStanleyUsed = true;
 
         //used to update the screen status bar etc
-        private int displayUpdateHalfSecondCounter = 0, displayUpdateOneSecondCounter = 0, displayUpdateOneFifthCounter = 0, displayUpdateThreeSecondCounter = 0;
+        private bool oneFifthSecond = false, oneHalfSecond = false, oneSecond = false, twoSeconds = false;
 
-        private int threeSecondCounter = 0, threeSeconds = 0;
-        private int oneSecondCounter = 0, oneSecond = 0;
-        private int oneHalfSecondCounter = 0, oneHalfSecond = 0;
-        private int oneFifthSecondCounter = 0, oneFifthSecond = 0;
+        private int oneFifthSecondCounter = 0, oneHalfSecondCounter = 0, oneSecondCounter = 0, twoSecondCounter = 0;
+
+
+
 
         public int pbarSteer, pbarRelay, pbarUDP;
 
@@ -471,10 +471,13 @@ namespace AgOpenGPS
             baudRateGPS = Settings.Default.setPort_baudRate;
             portNameGPS = Settings.Default.setPort_portNameGPS;
 
+            baudRateGPS2 = Settings.Default.setPort_baudRate2;
+            portNameGPS2 = Settings.Default.setPort_portNameGPS2;
+
             //try and open
             SerialPortOpenGPS();
 
-            if (sp.IsOpen)
+            if (spGPS.IsOpen)
             {
                 simulatorOnToolStripMenuItem.Checked = false;
                 panelSim.Visible = false;
@@ -2005,13 +2008,14 @@ namespace AgOpenGPS
  * The watchdog timer times out and runs this function tmrWatchdog_tick().
  * 50 times per second so statusUpdateCounter counts to 25 and updates strip menu etc at 2 hz
  * it also makes sure there is new sentences showing up otherwise it shows **** No GGA....
- * saveCounter ticks 2 x per second, used at end of draw routine every minute to save a backup of field
+ * saveCounter ticks 1 x per second, used at end of draw routine every minute to save a backup of field
  * then ScanForNMEA function checks for a complete sentence if contained in pn.rawbuffer
  * if not it comes right back and waits for next watchdog trigger and starts all over
  * if a new sentence is there, UpdateFix() is called
  * Right away CalculateLookAhead(), no skips, is called to determine lookaheads and trigger distances to save triangles plotted
  * Then UpdateFix() continues.
  * Hitch, pivot, antenna locations etc and directions are figured out if trigDistance is triggered
+ * 
  * When that is done, DoRender() is called on the visible OpenGL screen and its draw routine _draw is run
  * before triangles are drawn, frustum cull figures out how many of the triangles should be drawn
  * When its all the way thru, it triggers the sectioncontrol Draw, its frustum cull, and determines if sections should be on

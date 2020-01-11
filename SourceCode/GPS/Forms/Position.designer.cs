@@ -91,14 +91,17 @@ namespace AgOpenGPS
         //called by watchdog timer every 10 ms, returns true if new valid fix
         private bool ScanForNMEA()
         {
-            //update the recv string so it can display at least something
-            recvSentenceSettings = pn.rawBuffer;
+            //if (Properties.Settings.Default.setGPS_fixFromWhichSentence != "UBX")
+            //{
+                //update the recv string so it can display at least something
+                recvSentenceSettings = pn.rawBuffer;
 
-            //parse any data from pn.rawBuffer
-            pn.ParseNMEA();
+                //parse any data from pn.rawBuffer
+                pn.ParseNMEA();
+            //}
 
             //time for a frame update with new valid nmea data
-            if (pn.updatedGGA | pn.updatedOGI | pn.updatedRMC)
+            if (pn.updatedGGA | pn.updatedOGI | pn.updatedRMC | pn.updatedUBX)
             {
                 //Measure the frequency of the GPS updates
                 swHz.Stop();
@@ -115,6 +118,7 @@ namespace AgOpenGPS
                 pn.updatedGGA = false;
                 pn.updatedOGI = false;
                 pn.updatedRMC = false;
+                pn.updatedUBX = false;
 
                 //update all data for new frame
                 UpdateFixPosition();
@@ -172,7 +176,7 @@ namespace AgOpenGPS
 
             rollUsed = 0;
 
-            if (ahrs.isRollFromBrick | ahrs.isRollFromAutoSteer | ahrs.isRollFromGPS | ahrs.isRollFromExtUDP)
+            if (ahrs.isRollFromBrick | ahrs.isRollFromAutoSteer | ahrs.isRollFromGPS | ahrs.isRollFromExtUDP && ahrs.rollX16 != 9999)
             {
                 rollUsed = ((double)(ahrs.rollX16 - ahrs.rollZeroX16)) * 0.0625;
 

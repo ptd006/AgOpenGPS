@@ -5,6 +5,10 @@ using System;
 using System.Windows.Forms;
 using System.Globalization;
 using AgOpenGPS.Properties;
+using System.Text;
+using System.Threading;
+using System.IO;
+using System.Linq;
 
 namespace AgOpenGPS
 {
@@ -487,11 +491,11 @@ namespace AgOpenGPS
         //called by the GPS delegate every time a chunk is rec'd
         private void SerialLineReceived(string sentence)
         {
-
             //spit it out no matter what it says
             pn.rawBuffer += sentence;
             //recvSentenceSettings = sbNMEAFromGPS.ToString();
         }
+
 
         private delegate void LineReceivedEventHandler(string sentence);
 
@@ -501,13 +505,55 @@ namespace AgOpenGPS
         public int MessageLength = 0;
         int CK_A = 0, CK_B = 0;
 
+        public bool started = false;
 
 
-
-
-    //serial port receive in its own thread
-    private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        private void method2()
         {
+            while (true)
+            {
+                pn.updatedUBX = !pn.updatedUBX;
+            }
+        }
+
+
+        //serial port receive in its own thread
+        private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            //if (started == false)
+            //{
+                //started = true;
+                //Thread thr1 = new Thread(method2);
+                //Thread thr2 = new Thread(method2);
+               // Thread thr3 = new Thread(method2);
+
+
+                //thr1.Start();
+                //thr2.Start();
+                //thr3.Start();
+
+            //}
+            //System.Windows.Forms.MessageBox.Show("---" + pn.updatedUBX.ToString());
+
+            /*
+            // Creating and initializing threads 
+            Thread thr1 = new Thread(method2);
+            Thread thr2 = new Thread(method2);
+            Thread thr3 = new Thread(method2);
+            Thread thr4 = new Thread(method2);
+            Thread thr5 = new Thread(method2);
+
+            System.Windows.Forms.MessageBox.Show("---" + spGPS.ReceivedBytesThreshold.ToString());
+            thr1.Start();
+            thr2.Start();
+            thr3.Start();
+            thr4.Start();
+            thr5.Start();
+            System.Windows.Forms.MessageBox.Show("---" + pn.updatedUBX.ToString());
+            */
+
+
+
             if (spGPS.IsOpen)
             {
                 try
@@ -557,15 +603,13 @@ namespace AgOpenGPS
 
 
 
-                                        /*
-                                        • UBX - NAV - PVT: The carrSoln flag will be set to 1 for RTK float and 2 for RTK fixed.
-                                        • UBX - NAV - RELPOSNED: The diffSoln and refPosValid flags will be set.The carrSoln flag will be
-                                            set to 1 for RTK float and 2 for RTK fixed.
-                                        */
 
 
+                                        if (0x01 == rawBuffer[2] && 0x04 == rawBuffer[3])//UBX-NAV-DOP
+                                        {
 
-                                        if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])//UBX-NAV-RELPOSNED
                                         {
                                             byte rr = rawBuffer[66];
 
@@ -576,33 +620,67 @@ namespace AgOpenGPS
                                                 double heading = BitConverter.ToInt32(rawBuffer, 30) * 0.00001;
                                                 int roll = (int)(Math.Atan2(BitConverter.ToInt32(rawBuffer, 22) + BitConverter.ToInt32(rawBuffer, 40) / 100, 100) * Math.PI / (double)180 * 16);
 
+
+                                                //pn.headingHDT = BitConverter.ToInt32(rawBuffer, 30) * 0.00001;
+                                                //ahrs.rollX16 =  (int)(Math.Atan2(BitConverter.ToInt32(rawBuffer, 22) + BitConverter.ToInt32(rawBuffer, 40) / 100, 100) * Math.PI / (double)180 * 16);
+
+
+                                                //• UBX - NAV - RELPOSNED: The carrSoln flag will be set to 1 for RTK float and 2 for RTK fixed.
+                                                //bit 3 & 4
+                                                //not sure if this is right
                                                 if ((rr & (1 << 3)) != 0)
                                                 {
+                                                    //pn.fixQuality = 4;
                                                     sentence = "$UBX-RELPOSNED,4," + heading.ToString("N4") + "," + roll.ToString("N4") + "*";
                                                 }
                                                 else if ((rr & (1 << 4)) != 0)
                                                 {
+                                                    //pn.fixQuality = 3;
                                                     sentence = "$UBX-RELPOSNED,3," + heading.ToString("N4") + "," + roll.ToString("N4") + "*";
                                                 }
                                                 else
                                                 {
+                                                    //pn.fixQuality = 2;
                                                     sentence = "$UBX-RELPOSNED,2," + heading.ToString("N4") + "," + roll.ToString("N4") + "*";
                                                 }
                                             }
                                         }
-                                        else if (0x01 == rawBuffer[2] && 0x14 == rawBuffer[3])
+                                        else if (0x01 == rawBuffer[2] && 0x14 == rawBuffer[3])//UBX-NAV-HPPOSLLH
                                         {
                                             sentence = "$UBX-HPPOSLLH,0,0,0,0*";
                                             if ((rawBuffer[9] & (1 << 0)) == 0)
                                             {
+
+                                                //pn.longitude = (rawBuffer[30] * 0.01 + BitConverter.ToInt32(rawBuffer, 14)) * 0.0000001;
+                                                //pn.latitude = (rawBuffer[31] * 0.01 + BitConverter.ToInt32(rawBuffer, 18)) * 0.0000001;
+                                                //pn.altitude = (rawBuffer[32] * 0.01 + BitConverter.ToInt32(rawBuffer, 22)) / 1000.0;
+                                                //pn.UpdateNorthingEasting();
+                                                //recvCounter = 0;
+                                                //pn.updatedUBX = true;
+
+
+
+
                                                 double longitude = (rawBuffer[30] * 0.01 + BitConverter.ToInt32(rawBuffer, 14)) * 0.0000001;
                                                 double latitude = (rawBuffer[31] * 0.01 + BitConverter.ToInt32(rawBuffer, 18)) * 0.0000001;
                                                 double altitude = (rawBuffer[32] * 0.01 + BitConverter.ToInt32(rawBuffer, 22)) / 1000.0;
                                                 sentence = "$UBX-HPPOSLLH,1," + longitude.ToString("N7") + "," + latitude.ToString("N7") + "," + altitude.ToString("N7") + "*";
                                             }
                                         }
-                                        else if (0x01 == rawBuffer[2] && 0x07 == rawBuffer[3])
+                                        else if (0x01 == rawBuffer[2] && 0x07 == rawBuffer[3])// UBX-NAV-PVT
                                         {
+                                            //UBX-NAV-PVT: The carrSoln flag will be set to 1 for RTK float and 2 for RTK fixed.
+                                            //bit 6 & 7
+
+                                            //pn.fixQuality = 4;????????????
+
+                                            //pn.satellitesTracked = rawBuffer[29];
+
+                                            //pn.hdop = BitConverter.ToInt16(rawBuffer, 82) / 100.0;
+
+
+
+
                                             int satellitesTracked = rawBuffer[29];
 
                                             double longitude = BitConverter.ToInt32(rawBuffer, 30) * 0.0000001;
@@ -611,18 +689,31 @@ namespace AgOpenGPS
                                             double pdop = BitConverter.ToInt16(rawBuffer, 82) / 100.0;
 
 
+
+
                                             if ((rawBuffer[27] & (1 << 6)) != 0)
                                             {
+                                                //pn.fixQuality = 4;
                                                 sentence = "$UBX-PVT,3," + satellitesTracked.ToString() + "," + pdop.ToString("N5") + "," + latitude.ToString("N9") + "*";
                                             }
                                             else if ((rawBuffer[27] & (1 << 7)) != 0)
                                             {
+                                                //pn.fixQuality = 3;
                                                 sentence = "$UBX-PVT,4," + satellitesTracked.ToString() + "," + pdop.ToString("N2") + "," + latitude.ToString("N9") + "*";
                                             }
                                             else
                                             {
+                                                //pn.fixQuality = 2;
                                                 sentence = "$UBX-PVT,2," + satellitesTracked.ToString() + "," + pdop.ToString("N5") + "," + latitude.ToString("N9") + "*";
                                             }
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])//UBX-NAV-RELPOSNED
+                                        {
+
+                                        }
+                                        else if (0x01 == rawBuffer[2] && 0x3C == rawBuffer[3])//UBX-NAV-RELPOSNED
+                                        {
+
                                         }
 
 
@@ -651,6 +742,7 @@ namespace AgOpenGPS
                     }
                     else
                     {
+                        started = false;
                         //read whatever is in port
                         string sentence = spGPS.ReadExisting();
                         this.BeginInvoke(new LineReceivedEventHandler(SerialLineReceived), sentence);
@@ -690,6 +782,7 @@ namespace AgOpenGPS
             }
         }
 
+
         public void SerialPortOpenGPS()
         {
             //close it first
@@ -708,6 +801,9 @@ namespace AgOpenGPS
 
             if (!spGPS.IsOpen)
             {
+
+
+
                 spGPS.PortName = portNameGPS;
                 spGPS.BaudRate = baudRateGPS;
                 spGPS.DataReceived += sp_DataReceived;
@@ -736,13 +832,41 @@ namespace AgOpenGPS
                 spGPS.DiscardOutBuffer();
                 spGPS.DiscardInBuffer();
 
-                //update port status label
-                //stripPortGPS.Text = portNameGPS + " " + baudRateGPS.ToString();
-                //stripPortGPS.ForeColor = Color.ForestGreen;
-
                 Properties.Settings.Default.setPort_portNameGPS = portNameGPS;
                 Properties.Settings.Default.setPort_baudRate = baudRateGPS;
                 Properties.Settings.Default.Save();
+
+
+
+
+                //send config too f9p
+                using (StreamReader reader = new StreamReader("C:/Users/p00qwerty/Documents/text.txt"))
+                {
+                    try
+                    {
+
+                        while (!reader.EndOfStream)
+                        {
+                            //byte[] bytesToSend = { 0x38, 0x30, 0x31, 0x73, 0x21, 0x30, 0x30, 0x31, 0x0D };
+
+
+                            string line = reader.ReadLine();
+
+                            byte[] data = line.Split('-').Select(b => Convert.ToByte(b, 16)).ToArray();
+
+                            spGPS.Write(data, 0, data.Length);
+
+                            // System.Windows.Forms.MessageBox.Show("First byte: {" + 0x38.ToString() + "}");
+                            //System.Windows.Forms.MessageBox.Show("First byte: {" + data[0].ToString() + "}");
+
+                        }
+                    }
+                    catch (Exception er)
+                    {
+
+                        System.Windows.Forms.MessageBox.Show("First byte: {");
+                    }
+                }
             }
         }
         public void SerialPortOpenGPS2()

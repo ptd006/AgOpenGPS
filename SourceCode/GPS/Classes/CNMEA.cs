@@ -318,7 +318,6 @@ Field	Meaning
                 {
                     int.TryParse(words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality);
                     //fixQuality
-                    int.TryParse(words[4], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality);
 
                     //satellites tracked
                     int.TryParse(words[2], NumberStyles.Float, CultureInfo.InvariantCulture, out satellitesTracked);

@@ -33,6 +33,8 @@
             this.btnRescan = new System.Windows.Forms.Button();
             this.btnSerialOK = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblCurrentBaud2 = new System.Windows.Forms.Label();
+            this.lblCurrentPort2 = new System.Windows.Forms.Label();
             this.btnCloseSerial2 = new System.Windows.Forms.Button();
             this.btnOpenSerial2 = new System.Windows.Forms.Button();
             this.cboxBaud2 = new System.Windows.Forms.ComboBox();
@@ -71,8 +73,6 @@
             this.rbtnUBX = new System.Windows.Forms.RadioButton();
             this.rbtnOGI = new System.Windows.Forms.RadioButton();
             this.rbtnRMC = new System.Windows.Forms.RadioButton();
-            this.lblCurrentPort2 = new System.Windows.Forms.Label();
-            this.lblCurrentBaud2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -105,7 +105,7 @@
             this.btnSerialOK.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnSerialOK.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnSerialOK.Image = global::AgOpenGPS.Properties.Resources.OK64;
-            this.btnSerialOK.Location = new System.Drawing.Point(788, 660);
+            this.btnSerialOK.Location = new System.Drawing.Point(774, 563);
             this.btnSerialOK.Name = "btnSerialOK";
             this.btnSerialOK.Size = new System.Drawing.Size(156, 72);
             this.btnSerialOK.TabIndex = 59;
@@ -139,6 +139,27 @@
             this.groupBox1.TabIndex = 64;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GPS Port";
+            // 
+            // lblCurrentBaud2
+            // 
+            this.lblCurrentBaud2.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentBaud2.Location = new System.Drawing.Point(140, 139);
+            this.lblCurrentBaud2.Name = "lblCurrentBaud2";
+            this.lblCurrentBaud2.Size = new System.Drawing.Size(120, 24);
+            this.lblCurrentBaud2.TabIndex = 75;
+            this.lblCurrentBaud2.Text = "Baud";
+            this.lblCurrentBaud2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblCurrentPort2
+            // 
+            this.lblCurrentPort2.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentPort2.Location = new System.Drawing.Point(11, 137);
+            this.lblCurrentPort2.Name = "lblCurrentPort2";
+            this.lblCurrentPort2.Size = new System.Drawing.Size(100, 24);
+            this.lblCurrentPort2.TabIndex = 74;
+            this.lblCurrentPort2.Text = "Port";
+            this.lblCurrentPort2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblCurrentPort2.UseWaitCursor = true;
             // 
             // btnCloseSerial2
             // 
@@ -424,7 +445,7 @@
             this.groupBox2.Controls.Add(this.btnOpenSerialArduino);
             this.groupBox2.Controls.Add(this.btnCloseSerialArduino);
             this.groupBox2.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold);
-            this.groupBox2.Location = new System.Drawing.Point(12, 577);
+            this.groupBox2.Location = new System.Drawing.Point(22, 480);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(724, 155);
             this.groupBox2.TabIndex = 65;
@@ -465,7 +486,7 @@
             this.groupBox3.Controls.Add(this.btnOpenSerialAutoSteer);
             this.groupBox3.Controls.Add(this.btnCloseSerialAutoSteer);
             this.groupBox3.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold);
-            this.groupBox3.Location = new System.Drawing.Point(12, 396);
+            this.groupBox3.Location = new System.Drawing.Point(12, 310);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(724, 155);
             this.groupBox3.TabIndex = 66;
@@ -640,32 +661,11 @@
             this.rbtnRMC.Text = "RMC";
             this.rbtnRMC.UseVisualStyleBackColor = true;
             // 
-            // lblCurrentPort2
-            // 
-            this.lblCurrentPort2.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentPort2.Location = new System.Drawing.Point(11, 137);
-            this.lblCurrentPort2.Name = "lblCurrentPort2";
-            this.lblCurrentPort2.Size = new System.Drawing.Size(100, 24);
-            this.lblCurrentPort2.TabIndex = 74;
-            this.lblCurrentPort2.Text = "Port";
-            this.lblCurrentPort2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblCurrentPort2.UseWaitCursor = true;
-            // 
-            // lblCurrentBaud2
-            // 
-            this.lblCurrentBaud2.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentBaud2.Location = new System.Drawing.Point(140, 139);
-            this.lblCurrentBaud2.Name = "lblCurrentBaud2";
-            this.lblCurrentBaud2.Size = new System.Drawing.Size(120, 24);
-            this.lblCurrentBaud2.TabIndex = 75;
-            this.lblCurrentBaud2.Text = "Baud";
-            this.lblCurrentBaud2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // FormCommSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(956, 744);
+            this.ClientSize = new System.Drawing.Size(956, 649);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);

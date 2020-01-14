@@ -476,6 +476,7 @@ namespace AgOpenGPS
 
             //try and open
             SerialPortOpenGPS();
+            SerialPortOpenGPS2();
 
             if (spGPS.IsOpen)
             {

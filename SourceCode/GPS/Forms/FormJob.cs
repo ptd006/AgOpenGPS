@@ -53,8 +53,8 @@ namespace AgOpenGPS
             //int count = lvLines.SelectedItems.Count;
             //if (count > 0)
             //{
-            //    if (isOrderByName) mf.FileOpenField(mf.fieldsDirectory + lvLines.SelectedItems[0].SubItems[0].Text+"\\Field.txt");
-            //    else mf.FileOpenField(mf.fieldsDirectory + lvLines.SelectedItems[0].SubItems[1].Text + "\\Field.txt");
+            //    if (isOrderByName) mf.FileOpenField(mf.fieldsDirectory + lvLines.SelectedItems[0].SubItems[0].Text+"/Field.txt");
+            //    else mf.FileOpenField(mf.fieldsDirectory + lvLines.SelectedItems[0].SubItems[1].Text + "/Field.txt");
             //    Close();
             //}
         }
@@ -78,12 +78,14 @@ namespace AgOpenGPS
 
         private void FormJob_Load(object sender, EventArgs e)
         {
+
             //check if directory and file exists, maybe was deleted etc
             if (String.IsNullOrEmpty(mf.currentFieldDirectory)) btnJobResume.Enabled = false;
-            string directoryName = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
+            string directoryName = mf.fieldsDirectory + mf.currentFieldDirectory + "/";
 
             string fileAndDirectory = directoryName + "Field.txt";
 
+            
             if (!File.Exists(fileAndDirectory))
             {
                 textBox1.Text = "";

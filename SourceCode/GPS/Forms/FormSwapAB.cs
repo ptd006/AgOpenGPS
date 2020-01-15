@@ -100,13 +100,13 @@ namespace AgOpenGPS
 
             //make sure at least a blank AB Line file exists
             //make sure at least a global blank AB Line file exists
-            string dirField = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
+            string dirField = mf.fieldsDirectory + mf.currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField).ToString(CultureInfo.InvariantCulture);
 
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            filename = directoryName + "\\ABLines.txt";
+            filename = directoryName + "/ABLines.txt";
             if (!File.Exists(filename))
             {
                 using (StreamWriter writer = new StreamWriter(filename))
@@ -120,7 +120,7 @@ namespace AgOpenGPS
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            filename = directoryName + "\\ABLines.txt";
+            filename = directoryName + "/ABLines.txt";
 
             if (!File.Exists(filename))
             {
@@ -159,7 +159,7 @@ namespace AgOpenGPS
 
             //make sure at least a blank quickAB file exists
             directoryName = Path.GetDirectoryName(mf.fieldsDirectory).ToString(CultureInfo.InvariantCulture);
-            directoryName += "\\" + mf.currentFieldDirectory + "\\";
+            directoryName += "/" + mf.currentFieldDirectory + "/";
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
             filename = directoryName + "QuickAB.txt";

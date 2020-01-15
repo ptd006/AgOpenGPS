@@ -377,7 +377,13 @@ namespace AgOpenGPS
         {
             //save new copy of kml with selected flag and view in GoogleEarth
             mf.FileMakeCurrentKML(mf.pn.latitude, mf.pn.longitude);
-            System.Diagnostics.Process.Start(mf.fieldsDirectory + mf.currentFieldDirectory + "\\CurrentPosition.KML");
+            // 
+
+            
+
+            //System.Diagnostics.Process.Start(mf.fieldsDirectory + mf.currentFieldDirectory + "/CurrentPosition.KML");
+            System.Diagnostics.Process.Start(Path.Combine(mf.fieldsDirectory, mf.currentFieldDirectory, "CurrentPosition.KML"));
+            
         }
 
         private void nudBndOffset_Enter(object sender, EventArgs e)
@@ -426,7 +432,7 @@ namespace AgOpenGPS
                     OpenFileDialog ofd = new OpenFileDialog
                     {
                         //set the filter to text KML only
-                        Filter = "KML files (*.KML)|*.KML",
+                        Filter = "KML files (*.KML)|*.kml;*.KML",
 
                         //the initial directory, fields, for the open dialog
                         InitialDirectory = mf.fieldsDirectory + mf.currentFieldDirectory

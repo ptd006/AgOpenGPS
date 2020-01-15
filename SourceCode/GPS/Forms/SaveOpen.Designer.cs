@@ -14,13 +14,13 @@ namespace AgOpenGPS
         //public void FileAppendCurveLine(string curveName)
         //{
         //    //get the directory and make sure it exists, create if not
-        //    string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+        //    string dirField = fieldsDirectory + currentFieldDirectory + "/";
         //    string directoryName = Path.GetDirectoryName(dirField);
 
         //    if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
         //    { Directory.CreateDirectory(directoryName); }
 
-        //    string filename = directoryName + "\\CurveLines.txt";
+        //    string filename = directoryName + "/CurveLines.txt";
 
         //    //use Streamwriter to create and append to existing curveLines file
         //    using (StreamWriter writer = new StreamWriter(filename, true))
@@ -80,13 +80,13 @@ namespace AgOpenGPS
         //public void FileAppendABLine()
         //{
         //    //make sure at least a global blank AB Line file exists
-        //    string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+        //    string dirField = fieldsDirectory + currentFieldDirectory + "/";
         //    string directoryName = Path.GetDirectoryName(dirField).ToString(CultureInfo.InvariantCulture);
 
         //    if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
         //    { Directory.CreateDirectory(directoryName); }
 
-        //    string filename = directoryName + "\\ABLines.txt";
+        //    string filename = directoryName + "/ABLines.txt";
 
         //    ABLine.numABLines = ABLine.lineArr.Count;
 
@@ -131,13 +131,13 @@ namespace AgOpenGPS
         {
             curve.moveDistance = 0;
 
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField).ToString(CultureInfo.InvariantCulture);
 
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string filename = directoryName + "\\CurveLines.txt";
+            string filename = directoryName + "/CurveLines.txt";
 
             int cnt = curve.curveArr.Count;
             curve.numCurveLines = cnt;
@@ -197,13 +197,13 @@ namespace AgOpenGPS
             curve.numCurveLines = 0;
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField);
 
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string filename = directoryName + "\\CurveLines.txt";
+            string filename = directoryName + "/CurveLines.txt";
 
             if (!File.Exists(filename))
             {
@@ -287,14 +287,14 @@ namespace AgOpenGPS
             ABLine.moveDistance = 0;
 
             //make sure at least a global blank AB Line file exists
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField).ToString(CultureInfo.InvariantCulture);
 
             //get the file of previous AB Lines
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string filename = directoryName + "\\ABLines.txt";
+            string filename = directoryName + "/ABLines.txt";
             int cnt = ABLine.lineArr.Count;
 
             using (StreamWriter writer = new StreamWriter(filename, false))
@@ -324,13 +324,13 @@ namespace AgOpenGPS
             ABLine.moveDistance = 0;
 
             //make sure at least a global blank AB Line file exists
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField).ToString(CultureInfo.InvariantCulture);
 
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            string filename = directoryName + "\\ABLines.txt";
+            string filename = directoryName + "/ABLines.txt";
 
             if (!File.Exists(filename))
             {
@@ -398,7 +398,7 @@ namespace AgOpenGPS
         {
             //in the current application directory
             //string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            //string fieldDir = dir + "\\fields\\";
+            //string fieldDir = dir + "/fields/";
 
             string dirVehicle = vehiclesDirectory;
 
@@ -837,7 +837,7 @@ namespace AgOpenGPS
         {
             //in the current application directory
             //string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            //string fieldDir = dir + "\\fields\\";
+            //string fieldDir = dir + "/fields/";
 
             string dirTool = toolsDirectory;
 
@@ -1146,7 +1146,7 @@ namespace AgOpenGPS
         {
             //in the current application directory
             //string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            //string fieldDir = dir + "\\fields\\";
+            //string fieldDir = dir + "/fields/";
 
             string dirEnvironment = envDirectory;
 
@@ -1470,13 +1470,13 @@ namespace AgOpenGPS
             else fileAndDirectory = "Cancel";
 
             //get the directory where the fields are stored
-            //string directoryName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+ "\\fields\\";
+            //string directoryName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+ "/fields/";
             switch (_openType)
             {
                 case "Resume":
                     {
                         //Either exit or update running save
-                        fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Field.txt";
+                        fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/Field.txt";
                         if (!File.Exists(fileAndDirectory)) fileAndDirectory = "Cancel";
                         break;
                     }
@@ -1621,7 +1621,7 @@ namespace AgOpenGPS
             }
             
             //section patches
-            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Sections.txt";
+            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/Sections.txt";
             if (!File.Exists(fileAndDirectory))
             {
                 var form = new FormTimedMessage(2000, gStr.gsMissingSectionFile, gStr.gsButFieldIsLoaded);
@@ -1686,7 +1686,7 @@ namespace AgOpenGPS
 
                     // Contour points ----------------------------------------------------------------------------
 
-                    fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Contour.txt";
+                    fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/Contour.txt";
             if (!File.Exists(fileAndDirectory))
             {
                 var form = new FormTimedMessage(2000, gStr.gsMissingContourFile, gStr.gsButFieldIsLoaded);
@@ -1740,7 +1740,7 @@ namespace AgOpenGPS
             // Flags -------------------------------------------------------------------------------------------------
 
             //Either exit or update running save
-            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Flags.txt";
+            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/Flags.txt";
             if (!File.Exists(fileAndDirectory))
             {
                 var form = new FormTimedMessage(2000, gStr.gsMissingFlagsFile, gStr.gsButFieldIsLoaded);
@@ -1816,7 +1816,8 @@ namespace AgOpenGPS
 
             //Boundaries
             //Either exit or update running save
-                fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Boundary.txt";
+            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/Boundary.Txt";
+
             if (!File.Exists(fileAndDirectory))
             {
                 var form = new FormTimedMessage(2000, gStr.gsMissingBoundaryFile, gStr.gsButFieldIsLoaded);
@@ -1911,7 +1912,7 @@ namespace AgOpenGPS
             }
 
             // Headland  -------------------------------------------------------------------------------------------------
-            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\Headland.txt";
+            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/Headland.txt";
 
             if (File.Exists(fileAndDirectory))
             {
@@ -1973,7 +1974,7 @@ namespace AgOpenGPS
             btnHeadlandOnOff.Image = Properties.Resources.HeadlandOff;
 
             //Recorded Path
-            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\RecPath.txt";
+            fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/RecPath.txt";
             if (File.Exists(fileAndDirectory))
             {
                 using (StreamReader reader = new StreamReader(fileAndDirectory))
@@ -2035,7 +2036,7 @@ namespace AgOpenGPS
             string myFileName, dirField;
 
             //get the directory and make sure it exists, create if not
-            dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            dirField = fieldsDirectory + currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField);
 
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2084,7 +2085,7 @@ namespace AgOpenGPS
             string myFileName, dirField;
 
             //get the directory and make sure it exists, create if not
-            dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            dirField = fieldsDirectory + currentFieldDirectory + "/";
             string directoryName = Path.GetDirectoryName(dirField);
 
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2121,7 +2122,7 @@ namespace AgOpenGPS
             if (patchSaveList.Count() > 0)
             {
                 //Append the current list to the field file
-                using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "\\Sections.txt"), true))
+                using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "/Sections.txt"), true))
                 {
                     //for each patch, write out the list of triangles to the file
                     foreach (var triList in patchSaveList)
@@ -2148,7 +2149,7 @@ namespace AgOpenGPS
             //10.1728031317344,0.723157039771303 -easting, northing
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2171,7 +2172,7 @@ namespace AgOpenGPS
             //64.697,0.168,-21.654,0 - east, heading, north, altitude
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2196,7 +2197,7 @@ namespace AgOpenGPS
             if (contourSaveList.Count() > 0)
             {
                 //Append the current list to the field file
-                using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "\\Contour.txt"), true))
+                using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "/Contour.txt"), true))
                 {
 
                     //for every new chunk of patch in the whole section
@@ -2224,7 +2225,7 @@ namespace AgOpenGPS
         public void FileSaveBoundary()
         {
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2256,7 +2257,7 @@ namespace AgOpenGPS
         public void FileSaveHeadland()
         {
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2288,7 +2289,7 @@ namespace AgOpenGPS
         public void FileCreateRecPath()
         {
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2309,13 +2310,13 @@ namespace AgOpenGPS
         public void FileSaveRecPath()
         {
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
             { Directory.CreateDirectory(directoryName); }
 
-            //string fileAndDirectory = fieldsDirectory + currentFieldDirectory + "\\RecPath.txt";
+            //string fileAndDirectory = fieldsDirectory + currentFieldDirectory + "/RecPath.txt";
             //if (!File.Exists(fileAndDirectory)) FileCreateRecPath();
 
             //write out the file
@@ -2349,7 +2350,7 @@ namespace AgOpenGPS
             //533172,5927719,12 - offset easting, northing, zone
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2394,7 +2395,7 @@ namespace AgOpenGPS
         //    //Saturday, February 11, 2017  -->  7:26:52 AM
 
         //    //get the directory and make sure it exists, create if not
-        //    string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+        //    string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
         //    string directoryName = Path.GetDirectoryName(dirField);
         //    if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2435,7 +2436,7 @@ namespace AgOpenGPS
         //    //Saturday, February 11, 2017  -->  7:26:52 AM
 
         //    //get the directory and make sure it exists, create if not
-        //    string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+        //    string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
         //    string directoryName = Path.GetDirectoryName(dirField);
         //    if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2476,7 +2477,7 @@ namespace AgOpenGPS
         //save nmea sentences
         public void FileSaveNMEA()
         {
-            using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "\\NMEA_log.txt"), true))
+            using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "/NMEA_log.txt"), true))
             {
                 writer.Write(pn.logNMEASentence.ToString());
             }
@@ -2486,7 +2487,7 @@ namespace AgOpenGPS
         //save nmea sentences
         public void FileSaveElevation()
         {
-            using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "\\Elevation.txt"), true))
+            using (StreamWriter writer = new StreamWriter((fieldsDirectory + currentFieldDirectory + "/Elevation.txt"), true))
             {
                 writer.Write(sbFix.ToString());
             }
@@ -2498,7 +2499,7 @@ namespace AgOpenGPS
         {
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2570,7 +2571,7 @@ namespace AgOpenGPS
 
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2616,7 +2617,7 @@ namespace AgOpenGPS
         {
 
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))
@@ -2660,7 +2661,7 @@ namespace AgOpenGPS
         public void FileMakeCurrentKML(double lat, double lon)
         {
             //get the directory and make sure it exists, create if not
-            string dirField = fieldsDirectory + currentFieldDirectory + "\\";
+            string dirField = fieldsDirectory + currentFieldDirectory + "/";
 
             string directoryName = Path.GetDirectoryName(dirField);
             if ((directoryName.Length > 0) && (!Directory.Exists(directoryName)))

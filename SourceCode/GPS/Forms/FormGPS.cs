@@ -445,37 +445,39 @@ namespace AgOpenGPS
 
 
             if (Settings.Default.setF_workingDirectory == "Default")
-                baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\AgOpenGPS\\";
-            else baseDirectory = Settings.Default.setF_workingDirectory + "\\AgOpenGPS\\";
+                baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AgOpenGPS/";
+            else baseDirectory = Settings.Default.setF_workingDirectory + "/AgOpenGPS/";
+
+            
 
             //get the fields directory, if not exist, create
-            fieldsDirectory = baseDirectory + "Fields\\";
+            fieldsDirectory = baseDirectory + "Fields/";
             string dir = Path.GetDirectoryName(fieldsDirectory);
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
             //get the fields directory, if not exist, create
-            vehiclesDirectory = baseDirectory + "Vehicles\\";
+            vehiclesDirectory = baseDirectory + "Vehicles/";
             dir = Path.GetDirectoryName(vehiclesDirectory);
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
             //get the tools directory, if not exist, create
-            toolsDirectory = baseDirectory + "Tools\\";
+            toolsDirectory = baseDirectory + "Tools/";
             dir = Path.GetDirectoryName(toolsDirectory);
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
             //get the tools directory, if not exist, create
-            envDirectory = baseDirectory + "Environments\\";
+            envDirectory = baseDirectory + "Environments/";
             dir = Path.GetDirectoryName(envDirectory);
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
 
             //make sure current field directory exists, null if not
-            currentFieldDirectory = Settings.Default.setF_CurrentDir;
+            currentFieldDirectory = Settings.Default.setF_CurrentDir;            
 
             string curDir;
             if (currentFieldDirectory != "")
             {
-                curDir = fieldsDirectory + currentFieldDirectory + "//";
+                curDir = fieldsDirectory + currentFieldDirectory + "/";
                 dir = Path.GetDirectoryName(curDir);
                 if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 {
@@ -486,7 +488,7 @@ namespace AgOpenGPS
             }
 
             string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string wave = Path.Combine(directoryName, "Dependencies\\Audio", "Boundary.Wav");
+            string wave = Path.Combine(directoryName, "Dependencies/Audio", "Boundary.Wav");
             if (File.Exists(wave))
             {
                 sndBoundaryAlarm = new SoundPlayer(wave);
@@ -505,7 +507,7 @@ namespace AgOpenGPS
             fixUpdateTime = 1 / (double)fixUpdateHz;
 
             //get the abLines directory, if not exist, create
-            ablinesDirectory = baseDirectory + "ABLines\\";
+            ablinesDirectory = baseDirectory + "ABLines/";
             dir = Path.GetDirectoryName(fieldsDirectory);
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
@@ -607,7 +609,7 @@ namespace AgOpenGPS
             //boundaryTriggerDistance = Settings.Default.setF_boundaryTriggerDistance;
 
             //load the last used auto turn shape
-            string fileAndDir = @".\Dependencies\YouTurnShapes\" + Properties.Settings.Default.setAS_youTurnShape;
+            string fileAndDir = @"./Dependencies/YouTurnShapes/" + Properties.Settings.Default.setAS_youTurnShape;
             yt.LoadYouTurnShapeFromFile(fileAndDir);
 
             //sim.latitude = Settings.Default.setSim_lastLat;
@@ -701,7 +703,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "Landscape.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "Landscape.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -724,7 +726,7 @@ namespace AgOpenGPS
 
             try
             {
-                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies\\Images", "Floor.png");
+                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies/Images", "Floor.png");
                 if (File.Exists(text2))
                 {
                     using (Bitmap bitmap2 = new Bitmap(text2))
@@ -747,7 +749,7 @@ namespace AgOpenGPS
 
             try
             {
-                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies\\Images", "Font.png");
+                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies/Images", "Font.png");
                 if (File.Exists(text2))
                 {
                     using (Bitmap bitmap = new Bitmap(text2))
@@ -773,7 +775,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "Turn.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "Turn.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -797,7 +799,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "TurnCancel.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "TurnCancel.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -821,7 +823,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "TurnManual.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "TurnManual.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -845,7 +847,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "Compass.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "Compass.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -869,7 +871,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "Speedo.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "Speedo.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -893,7 +895,7 @@ namespace AgOpenGPS
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies\\images", "SpeedoNedle.png");
+                string text = Path.Combine(directoryName, "Dependencies/Images", "SpeedoNedle.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -1735,7 +1737,7 @@ namespace AgOpenGPS
                 //string strPath = Application.StartupPath;
 
                 //Write out the error appending to existing
-                File.AppendAllText(baseDirectory + "\\" + strFileName, strErrorText + " - " +
+                File.AppendAllText(baseDirectory + "/" + strFileName, strErrorText + " - " +
                     DateTime.Now.ToString() + "\r\n\r\n");
             }
             catch (Exception ex)

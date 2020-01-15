@@ -39,7 +39,7 @@ namespace AgOpenGPS
             btnTemplate.Enabled = false;
             btnSave.Enabled = false;
             lblTemplateChosen.Text = "None Selected";
-            tboxVehicle.Text = mf.vehicleFileName + " " + mf.toolFileName;
+            tboxVehicle.Text = mf.vehicleFileName.Trim() + "_" + mf.toolFileName.Trim();
             lblFilename.Text = "";
         }
 
@@ -136,7 +136,7 @@ namespace AgOpenGPS
             mf.currentFieldDirectory += String.Format("{0}", DateTime.Now.ToString("yyyy.MMM.dd HH_mm", CultureInfo.InvariantCulture));
 
             //get the directory and make sure it exists, create if not
-            string dirNewField = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
+            string dirNewField = mf.fieldsDirectory + mf.currentFieldDirectory + "/";
 
             mf.menustripLanguage.Enabled = false;
             //if no template set just make a new file.
@@ -272,33 +272,33 @@ namespace AgOpenGPS
                     //copy over the files from template
                     string templateDirectoryName = Path.GetDirectoryName(mf.filePickerFileAndDirectory);
 
-                    string fileToCopy = templateDirectoryName + "\\Boundary.txt";
-                    string destinationDirectory = directoryName + "\\Boundary.txt";
+                    string fileToCopy = templateDirectoryName + "/Boundary.txt";
+                    string destinationDirectory = directoryName + "/Boundary.txt";
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
 
-                    fileToCopy = templateDirectoryName + "\\Elevation.txt";
-                    destinationDirectory = directoryName + "\\Elevation.txt";
+                    fileToCopy = templateDirectoryName + "/Elevation.txt";
+                    destinationDirectory = directoryName + "/Elevation.txt";
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
 
-                    fileToCopy = templateDirectoryName + "\\Flags.txt";
-                    destinationDirectory = directoryName + "\\Flags.txt";
+                    fileToCopy = templateDirectoryName + "/Flags.txt";
+                    destinationDirectory = directoryName + "/Flags.txt";
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
 
-                    fileToCopy = templateDirectoryName + "\\ABLines.txt";
-                    destinationDirectory = directoryName + "\\ABLines.txt";
+                    fileToCopy = templateDirectoryName + "/ABLines.txt";
+                    destinationDirectory = directoryName + "/ABLines.txt";
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
 
-                    fileToCopy = templateDirectoryName + "\\RecPath.txt";
-                    destinationDirectory = directoryName + "\\RecPath.txt";
+                    fileToCopy = templateDirectoryName + "/RecPath.txt";
+                    destinationDirectory = directoryName + "/RecPath.txt";
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
 
-                    fileToCopy = templateDirectoryName + "\\CurveLines.txt";
-                    destinationDirectory = directoryName + "\\CurveLines.txt";
+                    fileToCopy = templateDirectoryName + "/CurveLines.txt";
+                    destinationDirectory = directoryName + "/CurveLines.txt";
                     if (File.Exists(fileToCopy))
                         File.Copy(fileToCopy, destinationDirectory);
 

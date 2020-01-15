@@ -9,7 +9,7 @@ I intend to revisit this when I have the hardware built but wanted to commit bef
 
 Changes not tested on Windows yet.
 
-## Setup
+## Basic steps
 
 * Ubuntu 19.10 but that probably doesn't matter.
 * `sudo apt install mono-complete`
